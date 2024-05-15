@@ -64,13 +64,13 @@ def signup():
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    email = data.get('email')
+    adresse_mail = data.get('email')
     password = data.get('password')
 
     # Rechercher l'utilisateur dans la base de données
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE email = ? AND password = ?", (email, password))
+    cursor.execute("SELECT * FROM users WHERE adresse_mail = ? AND password = ?", (adresse_mail, password))
     user = cursor.fetchone()
     conn.close()
 
@@ -78,6 +78,10 @@ def login():
         return jsonify({'message': 'Connexion réussie', 'user': user}), 200
     else:
         return jsonify({'error': 'Utilisateur non trouvé ou mot de passe incorrect'}), 401
+    
+    
+    
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
