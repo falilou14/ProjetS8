@@ -8,10 +8,10 @@ import sqlite3
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def hello_world():
     return 'Hello World!'
-
 
 
 # Chemin vers la base de données SQLite
@@ -45,16 +45,19 @@ def get_users():
 @app.route('/signup', methods=['POST'])
 def signup():
     data = request.get_json()
+    id_user = data.get("id")
     nom = data.get("nom")
-    prenom = data.get(prenom)
+    prenom = data.get("prenom")
     adresse_mail = data.get('email')
+    tel = data.get("tel")
     password = data.get('password')
     username = data.get('username')
 
     # Insérer l'utilisateur dans la base de données
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO User ( nom, prenom ,adresse_mail, password ,username,) VALUES (?, ?, ?)", ( nom, prenom,adresse_mail, password,username,))
+    cursor.execute("INSERT INTO user ( id_user,nom, prenom ,adresse_mail,tel, mot_de_passe ,username) VALUES (?,?, ?, ?,?,?,?)", (id_user, nom, prenom,adresse_mail,tel, password,username,))
+    
     conn.commit()
     conn.close()
 
@@ -70,7 +73,7 @@ def login():
     # Rechercher l'utilisateur dans la base de données
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE adresse_mail = ? AND password = ?", (adresse_mail, password))
+    cursor.execute("SELECT * FROM user WHERE adresse_mail = ? AND mot_de_passe = ?", (adresse_mail, password))
     user = cursor.fetchone()
     conn.close()
 
