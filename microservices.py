@@ -22,7 +22,7 @@ def get_db_connection():
     conn = sqlite3.connect(DATABASE_PATH)
     return conn
 
-
+################################### ###############SERVICES POUR LA TABLE USER ######################################################
 
 # Endpoint pour afficher tous les noms des utilisateurs
 @app.route('/users', methods=['GET'])
@@ -36,8 +36,6 @@ def get_users():
     users_data = [{'id_user': user[1], 'username': user[0], 'firstname': user[2]} for user in users]
    
     return jsonify({'users': users_data}), 200
-
-
 
 
 
@@ -82,8 +80,28 @@ def login():
     else:
         return jsonify({'error': 'Utilisateur non trouvé ou mot de passe incorrect'}), 401
     
-    
-    
+
+
+
+
+
+##############################################SERVICES POUR LA TABLE GAME ######################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 
 if __name__ == '__main__':
