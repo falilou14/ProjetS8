@@ -45,14 +45,16 @@ def get_users():
 @app.route('/signup', methods=['POST'])
 def signup():
     data = request.get_json()
-    username = data.get('username')
-    email = data.get('email')
+    nom = data.get("nom")
+    prenom = data.get(prenom)
+    adresse_mail = data.get('email')
     password = data.get('password')
+    username = data.get('username')
 
     # Insérer l'utilisateur dans la base de données
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO User (username, email, password) VALUES (?, ?, ?)", (username, email, password))
+    cursor.execute("INSERT INTO User ( nom, prenom ,adresse_mail, password ,username,) VALUES (?, ?, ?)", ( nom, prenom,adresse_mail, password,username,))
     conn.commit()
     conn.close()
 
