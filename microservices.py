@@ -22,7 +22,7 @@ def get_db_connection():
     conn = sqlite3.connect(DATABASE_PATH)
     return conn
 
-################################### ###############SERVICES POUR LA TABLE USER ######################################################
+################################################## SERVICES POUR LA TABLE USER ######################################################
 
 # Endpoint pour afficher tous les noms des utilisateurs
 @app.route('/users', methods=['GET'])
@@ -39,7 +39,6 @@ def get_users():
 
 
 
-# Endpoint pour l'inscription
 @app.route('/signup', methods=['POST'])
 def signup():
     data = request.get_json()
@@ -51,15 +50,24 @@ def signup():
     password = data.get('password')
     username = data.get('username')
 
-    # Insérer l'utilisateur dans la base de données
+    # Vérifier si l'utilisateur existe déjà
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO user ( id_user,nom, prenom ,adresse_mail,tel, mot_de_passe ,username) VALUES (?,?, ?, ?,?,?,?)", (id_user, nom, prenom,adresse_mail,tel, password,username,))
-    
+    cursor.execute("SELECT * FROM user WHERE adresse_mail = ? OR username = ?", (adresse_mail, username))
+    existing_user = cursor.fetchone()
+
+    if existing_user:
+        conn.close()
+        return jsonify({'error': 'L\'utilisateur existe déjà'}), 400
+
+    # Insérer l'utilisateur dans la base de données
+    cursor.execute("INSERT INTO user (id_user, nom, prenom, adresse_mail, tel, mot_de_passe, username) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                   (id_user, nom, prenom, adresse_mail, tel, password, username))
     conn.commit()
     conn.close()
 
     return jsonify({'message': 'Utilisateur inscrit avec succès'}), 201
+
 
 # Endpoint pour la connexion
 @app.route('/login', methods=['POST'])
