@@ -93,7 +93,7 @@ def login():
 
 
 
-##############################################SERVICES POUR LA TABLE THEMES ######################################################
+############################################## SERVICES POUR LA TABLE THEMES ######################################################
 
 #Endpoint pour ajouter un theme 
 @app.route('/addTheme', methods=['POST'])
@@ -129,6 +129,42 @@ def AddTheme ():
        return jsonify({'message': 'Theme ajouté avec succès'}), 201
        
            
+
+@app.route('/UpdateTheme', methods=['POST'])
+def UpdateTheme():
+    data = request.get_json()
+    id_user = data.get('id')
+    intitule = data.get('intitule')
+    new_intitule = data.get('new_intitule')
+    new_list_q = data.get('new_list_q')
+
+    # Vérifier si l'utilisateur existe
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM user WHERE id_user = ?", (id_user,))
+    existing_user = cursor.fetchone()
+
+    if not existing_user:
+        conn.close()
+        return jsonify({'error': 'L\'utilisateur n\'existe pas'}), 404
+
+    # Vérifier si le thème existe
+    cursor.execute("SELECT * FROM theme WHERE intitule = ?", (intitule,))
+    existing_theme = cursor.fetchone()
+
+    if not existing_theme:
+        conn.close()
+        return jsonify({'error': 'Le thème n\'existe pas'}), 404
+
+    # Mettre à jour le thème en fonction de son id_theme
+    id_theme = existing_theme[0]  # Récupérer l'id_theme du thème existant
+    cursor.execute("UPDATE theme SET intitule = ?, list_q = ? WHERE id_theme = ?",
+                   (new_intitule, new_list_q, id_theme))
+    conn.commit()
+    conn.close()
+
+    return jsonify({'message': 'Thème mis à jour avec succès'}), 200
+
     
 
 
