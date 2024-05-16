@@ -93,8 +93,43 @@ def login():
 
 
 
-##############################################SERVICES POUR LA TABLE GAME ######################################################
+##############################################SERVICES POUR LA TABLE THEMES ######################################################
 
+#Endpoint pour ajouter un theme 
+@app.route('/addTheme', methods=['POST'])
+def AddTheme ():
+    data = request.get_json()
+    id_user = data.get('id')
+    intitule = data.get('intitule')
+    list_q = data.get('list_q')
+    # Vérifier si l'id_user est valide pour pouvoir ajouter un theme :
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM user WHERE id_user = ? ", (id_user,))
+    existing_user = cursor.fetchone()
+    
+    if(not existing_user):
+        
+        conn.close()
+        return jsonify({'error': 'id no existant '})
+    
+    if existing_user:
+       cursor.execute("SELECT * FROM theme WHERE intitule = ? OR list_q = ?", (intitule, list_q))
+       existing_theme = cursor.fetchone()
+       #si le theme existe déjà :
+       if existing_theme:
+           conn.close()
+           return jsonify({'error': 'Le theme existe déjà'}), 400
+       
+       #sinon:On peut ajouter le nouveau theme dans la base de données 
+       cursor.execute("INSERT INTO theme (intitule , list_q) VALUES (?,?) ",(intitule,list_q))
+       conn.commit()
+       conn.close()
+       
+       return jsonify({'message': 'Theme ajouté avec succès'}), 201
+       
+           
+    
 
 
 
