@@ -44,7 +44,7 @@ def parse_first_line(filename):
             grilleID = filename
             grilleID = filename.split('.')[0]
             return UserId, Username, theme, difficulty, grilleID,AssistanceMode
-    return "UserIdNotFound", "UsernameNotFound", "ThemeNotFound", "DifficultyNotFound", "GrilleIDNotFound"
+    return "UserIdNotFound", "UsernameNotFound", "ThemeNotFound", "DifficultyNotFound", "GrilleIDNotFound","AssistanceModeNotFound"
 
 def verify_log(UserId,Username,theme):
     existing_user = session.query(User).filter_by(id_user=UserId).first()
@@ -78,7 +78,7 @@ session.add(style)
 session.commit()
 #ajout de "EvennementJeu" dans la base de données
 date=getdateevent(filename)
-evenementjeu=EvennementJeu(id_grille=grilleID,id_style=style.id_style,date_debut=date[0],date_fin=date[1])
+evenementjeu=EvennementJeu(id_grille=grilleID,id_style=style.id_style,date_debut=date[0],date_fin=date[1],eventProperty='afaire')
 session.add(evenementjeu)
 session.commit()
 #ajout de "JeuJouer" dans la base de données

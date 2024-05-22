@@ -71,6 +71,8 @@ class EvennementJeu(Base):
     id_style = Column(String)
     date_debut = Column(String)
     date_fin = Column(String)
+    eventProperty = Column(String)  
+
 
 class JeuJouer(Base):
     __tablename__ = 'jeu_jouer'
