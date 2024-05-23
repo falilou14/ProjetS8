@@ -12,6 +12,45 @@ session = Session()
 
 filename = '1711859764703.txt'
 
+def eval_grille(file_path):
+    # Utilisation de sets pour garder les coordonnées uniques
+    cellules_differentes = set()
+    correct_count = 0
+    wrong_count = 0
+    
+    # Lecture du fichier ligne par ligne
+    with open(file_path, 'r') as file:
+        for line in file:
+            parts = line.strip().split(';')
+            event_type = parts[1]
+            if event_type in ['CELL_INPUT', 'CELL_CORRECT', 'CELL_WRONG', 'CELL_REPLACE']:
+                # Extraction des coordonnées x et y
+                coord_str = parts[2]  # Par exemple: 'x=0,y=7'
+                coord_parts = coord_str.split(',')
+                x = coord_parts[1].split('=')[1]
+                y = coord_parts[2].split('=')[1]
+                coord = (x, y)
+                cellules_differentes.add(coord)
+            
+            if event_type == 'CELL_CORRECT':
+                correct_count += 1
+            elif event_type == 'CELL_WRONG':
+                wrong_count += 1
+    
+    # Nombre de cellules différentes
+    nb_cellules_differentes = len(cellules_differentes)
+    
+    # Calcul de la performance
+    total_attempts = correct_count + wrong_count
+    if total_attempts == 0:
+        score = 0
+    else:
+        score = correct_count / total_attempts * 100
+    
+    return nb_cellules_differentes, score
+
+# Exemple d'utilisation avec un fichier 'events.txt'
+
 def getlog(filename):
     with open(filename, 'r') as file:
     # Lire toutes les lignes du fichier
@@ -61,6 +100,9 @@ def verify_log(UserId,Username,theme):
 
 UserId,Username,theme,difficulty,grilleID,AssistanceMode=parse_first_line(filename)
 
+nb_cellules_differentes, score = eval_grille(filename)
+print(f'Nombre de cellules différentes: {nb_cellules_differentes}')
+print(f'Score: {score:.2f}%')
 
 existing_theme = session.query(Theme).filter_by(intitule=theme).first()
 #ajout de "Jeu" dans la base de données
@@ -83,7 +125,7 @@ session.add(evenementjeu)
 session.commit()
 #ajout de "JeuJouer" dans la base de données
 log=getlog(filename)
-jeu_jouer=JeuJouer(id_event=evenementjeu.id_event,log=log,list='jsp',eval_grille='afaire')
+jeu_jouer=JeuJouer(id_event=evenementjeu.id_event,log=log,list='jsp',eval_grille=score)
 
 # Ajouter les instances à la session
 session.add(jeu_jouer)
@@ -92,5 +134,5 @@ session.commit()
 # Committer les changements pour les sauvegarder dans la base de données
 
 
-# Fermer la session
-session.close()
+# # Fermer la session
+# session.close()
