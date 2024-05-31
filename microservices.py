@@ -74,6 +74,9 @@ def signup():
 # Endpoint pour la connexion
 @app.route('/login', methods=['POST'])
 def login():
+    '''
+    Fonction login .....
+    '''
     data = request.get_json()
     adresse_mail = data.get('email')
     password = data.get('password')

@@ -1,5 +1,8 @@
 # Fonction pour transformer la liste de dictionnaires en une liste de tuples
 def transform_data(data):
+    '''
+    fonction qui transforme les données 
+    '''
     transformed_data = []
     for item in data:
         timestamp = item['timestamp']
