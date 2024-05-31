@@ -19,6 +19,7 @@ class User(Base):
     tel = Column(String)
     mot_de_passe = Column(String)
     username = Column(String)
+    role = Column(String)
 
 #Composé de users
 class Groupe(Base):
@@ -44,6 +45,8 @@ class Theme(Base):
     id_theme = Column(Integer, primary_key=True)
     intitule = Column(String)
     list_q = Column(String)  # Peut-être une liste de triplets sérialisée
+    DateCreation = Column(String)
+    id_theme_owner = Column(Integer)
 
 class Jeu(Base):
     __tablename__ = 'jeu'
@@ -53,6 +56,7 @@ class Jeu(Base):
     id_theme = Column(Integer)
     difficultes = Column(String)
     AssistanceMode =Column(String)  # Peut-être une liste de difficultés sérialisée
+    DateCreation = Column(String)
 
 #grille sur lequel le jeu est joué
 class GrilleJeu(Base):
