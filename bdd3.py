@@ -65,6 +65,7 @@ class GrilleJeu(Base):
     id_grille = Column(Integer, primary_key=True)
     nom_grille = Column(String)
     id_jeu = Column(Integer)
+    list_q_grid = Column(String)  #  liste de triplets sérialisée : (clue,clue_definition,clue_complexity)
     root_grille = Column(String)
 
 class EvennementJeu(Base):
