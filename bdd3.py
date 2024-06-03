@@ -36,7 +36,7 @@ class Team(Base):
     id_team = Column(Integer, primary_key=True)
     nom_team = Column(String)
     liste_id_users = Column(String)
-    id_challenge = Column(Integer)
+    
 
 #theme du jeu (c++, python, java, poo, algo, etc)
 class Theme(Base):
